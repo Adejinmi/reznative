@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/futura_book.ttf",
+      "sha1": "1bcd70a20cff464c22ac4c9519fb9f72dd9be22a"
+    },
+    {
+      "path": "assets/fonts/futura_light.ttf",
+      "sha1": "922d91d7c4f1ba42241a362bdafb59fe44baa85e"
+    },
+    {
+      "path": "assets/fonts/futura_medium.ttf",
+      "sha1": "738e0588a2b321c45c7eeca39f87e78a263b1d82"
+    }
+  ]
+}
