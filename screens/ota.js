@@ -78,6 +78,7 @@ export default OTA = ({ navigation })=>{
                 element.status=false
                 nom.push(element)
             });
+            setVisible(false)
             setStuds(nom)
             navigation.navigate('Take Attendance',{studs:nom,token:tok})
         } else {
@@ -88,7 +89,7 @@ export default OTA = ({ navigation })=>{
         
         
     } catch (error) {
-        
+            setVisible(false)
             setContent("Submit")
             Alert.alert("Oops!","Try Again!")
         
@@ -104,7 +105,7 @@ export default OTA = ({ navigation })=>{
             />
             <Prompt
                                 title={className}
-                                placeholder="Enter Class Password"
+                                placeholder={"Enter Class Password"}
                                 isVisible={visible}
                                 onChangeText={(text) => {
                                 setPassword(text)}}

@@ -5,6 +5,7 @@ import FeatIcons from 'react-native-vector-icons/Feather'
 import { AppContext } from "../components/appContext";
 import { useIsFocused } from "@react-navigation/native";
 import { db } from "../components/createDBandTable";
+import Prompt from 'react-native-prompt-crossplatform';
 
 
 const styles = StyleSheet.create({
@@ -53,12 +54,51 @@ export default TakeAttendance = ({ navigation }) =>{
     const [enabled, setEnabled] = useState(true)
     const [editing, setEditing] = useState(true)
     const [avail, setAvail] = useState(true)
+    const [visible, setVisible] = useState(false)
+    const [details, setDetails] = useState()
     const focus = useIsFocused()
-    const { instrument, instructor, className, total, level, token, api } = useContext(AppContext)
+    const { instrument, instructor, className, total, level, token, api, focused, setFocused } = useContext(AppContext)
 
     
     const addStudent = ()=>{
-        
+        setVisible(true)
+    }
+    const addOneStudent=async()=>{
+        if(details){
+            setVisible(false)
+            const det = details.split(',')
+            const stud = {}
+            stud.Name = det[0].trim()
+            stud.Matric = det[1].trim()
+            stud.status = false
+            Alert.alert('Alert!', `Are you sure you want to Add ${stud.Name} with Matric Number ${stud.Matric} ? This action cannot be reversed`, [{
+                text:"Yes",
+                onPress: async()=>{
+                    let query = `${className}nominalRoll`
+                    await db.transaction(async(tx)=>{
+                        await tx.executeSql(`SELECT * FROM ${query} WHERE Matric = '${stud.Matric}'`,[],
+                        (tx, results)=>{
+                            if (results.rows.length >0) {
+                                 Alert.alert("Oops!", `${results.rows.item(0).Name} has the same Matric number`)
+                            } else {
+                                tx.executeSql(`INSERT INTO ${query} (Matric, Name) Values (?,?)`,
+                                [stud.Matric, stud.Name],
+                                (tx, result)=>{
+                                    if (result.insertId>0) {
+                                        let students = nominalRoll
+                                        students.push(stud)
+                                        setNominalRoll(students)
+                                        setFocused(!focused)
+                                    }
+                                })
+                            }
+                        })
+                        
+                    })
+                }
+            }])
+
+        }
     }
 
     useEffect(()=>{
@@ -249,7 +289,28 @@ export default TakeAttendance = ({ navigation }) =>{
                 animated={true}
                 backgroundColor="rgb(80,80,225)"
             />
-
+            
+        <Prompt
+                                title={"Add 1 student"}
+                                placeholder={"Name, Matric Number"}
+                                isVisible={visible}
+                                onChangeText={(text) => {
+                                setDetails(text)}}
+                                onCancel={() => {
+                                    setVisible(false)
+                                    setDetails()
+                                }}
+                                onSubmit={() => {
+                                  addOneStudent()
+                                }}
+                                primaryColor='rgb(80,80,225)'
+                                headingStyle={{fontFamily:"futura_book", fontSize:14}}
+                                btnStyle={{backgroundColor:"green", width: 140, margin: 8, textAlign:"center", borderRadius:10}}
+                                promptBoxStyle={{flexDirection: "column", justifyContent:"center", alignItems:"center"}}
+                                inputStyle={{fontFamily:"futura_book", fontSize:15, margin:0, marginBottom:-20}}
+                                btnTextStyle={{fontFamily:"futura_book", fontSize:15, color:'white'}}
+                                submitButtonText={content}
+                            />
         <View style={[styles.section, styles.sectionElevation, {minHeight:100, width:'auto',  padding: 10, marginBottom:10}]}>
           <Text style={{fontFamily:'futura_medium', fontSize:16, color:'black'}}>
                 CLASS DETAILS 

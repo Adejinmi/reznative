@@ -56,7 +56,7 @@ export default RetrieveSetClass = ({ navigation })=>{
   },[focused, refresh])
 
   const authenthicate = async()=>{
-    try {
+    retrieval:try {
         const response = await fetch(
             `${api}/retrieveClass`,
           {
@@ -74,6 +74,27 @@ export default RetrieveSetClass = ({ navigation })=>{
         console.log(json.allEx)
         if (json.details && json.nominalroll && json.allAtt && json.allAttTak && json.allAss && json.assTak && json.allEx && json.exTak) {
             const {className, instrument, instructor, level, unit, token} = json.details
+            let payload=json
+            
+            await db.transaction(async (tx)=>{ 
+                await tx.executeSql(`SELECT * FROM ClassesCreated WHERE Name ='${className}'`,
+                [],
+                (tx, results)=>{
+                    if (results.rows.length>0) {
+                        shouldReturn = true   
+                        setPassword()
+                        setVisible(false)
+                        setContent('Submit')
+                        throw Alert.alert("Opps!","This Class Exists Already") 
+                    }
+                },
+                error=>{console.log(error)}
+                )
+            })
+            if (shouldReturn) {
+                break retrieval
+            }
+            
             await db.transaction(async (tx)=>{
                 await tx.executeSql(`CREATE TABLE IF NOT EXISTS BasicInfo (ID INTEGER PRIMARY KEY AUTOINCREMENT, Property TEXT, Description TEXT)`,
                 (tx, results)=>{
@@ -150,160 +171,172 @@ export default RetrieveSetClass = ({ navigation })=>{
                 ()=>{},
                 error=>{console.log(error)}
                 )})
-        
-            await db.transaction(async (tx)=>{
-                await tx.executeSql(`INSERT INTO ClassesCreated (Name,Password,Instructors,Instrument,Unit,Level) VALUES (?,?,?,?,?,?)`,
-                [className,token,instructor,instrument,unit,level],
-                ()=>{},
-                error=>{console.log(error)}
-                )
-            })
-
-            json.nominalroll.forEach(async(element) => {
-                let query = `${className}nominalroll`
-                const { name, matric} = element
-                await db.transaction(async(tx)=>{
-                    await tx.executeSql(`INSERT INTO ${query} (Name,Matric) VALUES (?,?)`,
-                    [name,matric],
-                    ()=>{},
-                    error=>{console.log(error)}
-                    )
-                })
-                
-            });
-
-            json.allAtt.forEach(async(element) => {
-                let query = `${className}attendance`
-                const { name, matric} = element
-                const attendance = element.att
-                await db.transaction(async(tx)=>{
-                    await tx.executeSql(`INSERT INTO ${query} (Name,Matric,Attendance) VALUES (?,?,?)`,
-                    [name,matric,attendance],
-                    ()=>{},
-                    error=>{console.log(error)}
-                    )
-                })
-            });
-
-            json.allAttTak.forEach(async(element) => {
-                let query = `${className}attendancetaken`
-                const { date, present, absent} = JSON.parse(element)
-                const status = "Submitted"
-                await db.transaction(async(tx)=>{
-                    await tx.executeSql(`INSERT INTO ${query} (Date,Present,Absent,Status) VALUES (?,?,?,?)`,
-                    [date,present,absent,status],
-                    ()=>{},
-                    error=>{console.log(error)}
-                    )
-                })
-            });
-
-            json.allAss.forEach(async(element) => {
-                let query = `${className}assessment`
-                const { name, matric} = element
-                const assessment = (element.ass)
-                await db.transaction(async(tx)=>{
-                    await tx.executeSql(`INSERT INTO ${query} (Name,Matric,Score) VALUES (?,?,?)`,
-                    [name,matric,assessment],
-                    ()=>{},
-                    error=>{console.log(error)}
-                    )
-                })
-            });
-
-            json.assTak.forEach(async(element) => {
-                let query = `${className}assessmenttaken`
-                let resp = JSON.parse(element)
-                for (let index = 0; index < Object.keys(resp).length; index++) {
-                    const date = (Object.keys(resp)[index])
-                    const total = parseInt(Object.values(resp)[index])
-                    const status = "Submitted"
-                    await db.transaction(async(tx)=>{
-                        await tx.executeSql(`INSERT INTO ${query} (Date,Total,Status) VALUES (?,?,?)`,
-                        [date,total,status],
-                        ()=>{},
-                        error=>{console.log(error)}
-                        )
-                    })                
-                }
-                
-            });
-
-            json.allEx.forEach(async(element) => {
-                let query = `${className}exam`
-                const { name, matric, ex} = element
-                const exa = JSON.parse(ex)
-                const exam = parseInt(Object.values(exa)[0])
-                await db.transaction(async(tx)=>{
-                    await tx.executeSql(`INSERT INTO ${query} (Name,Matric,Score) VALUES (?,?,?)`,
-                    [name,matric,exam],
-                    ()=>{},
-                    error=>{console.log(error)}
-                    )
-                })
-            });
-
-            await db.transaction(async(tx)=>{
-                await tx.executeSql(`SELECT * FROM BasicInfo WHERE Property = 'Exam'`,[],
-                (tx,results)=>{
-                    if (results.rows.length==0) {
-                        let desc={}
-                        desc[`${className}`]="Submitted"
-                        let description = JSON.stringify(desc)
-                        tx.executeSql(`INSERT INTO BasicInfo (Property, Description) Values (?,?)`,
-                            ['Exam', description],
-                            (tx,results)=>{
-                            })
-                    }else{
-                        let desc=JSON.parse(results.rows.item(0).Description)
-                        desc[`${className}`]="Submitted"
-                        let description = JSON.stringify(desc)
-                        tx.executeSql(`UPDATE BasicInfo SET Description = '${description}' WHERE Property = 'Exam'`,
-                            [],
-                            (tx,results)=>{
-                            })
-                    }
-                })
-            })
-
-            await db.transaction(async(tx)=>{
-
-                await tx.executeSql(`SELECT * FROM BasicInfo WHERE Property = 'ExamScore'`,[],
-                (tx,results)=>{
-                    if (results.rows.length==0) {
-                        let desc={}
-                        desc[`${className}`]= json.exTak[Object.keys(json.exTak)[0]]
-                        let description = JSON.stringify(desc)
-                        tx.executeSql(`INSERT INTO BasicInfo (Property, Description) Values (?,?)`,
-                            ['ExamScore', description],
-                            (tx,results)=>{
-                            })
-                    }else{
-                        let desc=JSON.parse(results.rows.item(0).Description)
-                        desc[`${className}`]=json.exTak[Object.keys(json.exTak)[0]]
-                        let description = JSON.stringify(desc)
-                        tx.executeSql(`UPDATE BasicInfo SET Description = '${description}' WHERE Property = 'ExamScore'`,
-                            [],
-                            (tx,results)=>{
-                            })
-                    }
-                })
-            })
-        
-        navigation.navigate("Home")
+                finishWork(payload)
             
         } else {
             setContent('Submit')
             setPassword()
+            setClassName()
             return Alert.alert("Oops!","Wrong Password!")
         }
         
         
     } catch (error) {
             setContent("Submit")
-            Alert.alert("Oops!","Check your Internet Connection and Try Again!")
+            setClassName()
+            Alert.alert("Oops!","Something went wrong, Try Again!")
       
     }
+  }
+
+  const finishWork = async(json)=>{
+    if (shouldReturn) {
+        setClassName()
+        return Alert.alert("Oops!","This Class Exists on This device Already")
+    } else {
+        const {className, instrument, instructor, level, unit, token} = json.details
+    await db.transaction(async (tx)=>{
+        await tx.executeSql(`INSERT INTO ClassesCreated (Name,Password,Instructors,Instrument,Unit,Level) VALUES (?,?,?,?,?,?)`,
+        [className,token,instructor,instrument,unit,level],
+        ()=>{},
+        error=>{console.log(error)}
+        )
+    })
+
+    json.nominalroll.forEach(async(element) => {
+        let query = `${className}nominalroll`
+        const { name, matric} = element
+        await db.transaction(async(tx)=>{
+            await tx.executeSql(`INSERT INTO ${query} (Name,Matric) VALUES (?,?)`,
+            [name,matric],
+            ()=>{},
+            error=>{console.log(error)}
+            )
+        })
+        
+    });
+
+    json.allAtt.forEach(async(element) => {
+        let query = `${className}attendance`
+        const { name, matric} = element
+        const attendance = element.att
+        await db.transaction(async(tx)=>{
+            await tx.executeSql(`INSERT INTO ${query} (Name,Matric,Attendance) VALUES (?,?,?)`,
+            [name,matric,attendance],
+            ()=>{},
+            error=>{console.log(error)}
+            )
+        })
+    });
+
+    json.allAttTak.forEach(async(element) => {
+        let query = `${className}attendancetaken`
+        const { date, present, absent} = JSON.parse(element)
+        const status = "Submitted"
+        await db.transaction(async(tx)=>{
+            await tx.executeSql(`INSERT INTO ${query} (Date,Present,Absent,Status) VALUES (?,?,?,?)`,
+            [date,present,absent,status],
+            ()=>{},
+            error=>{console.log(error)}
+            )
+        })
+    });
+
+    json.allAss.forEach(async(element) => {
+        let query = `${className}assessment`
+        const { name, matric} = element
+        const assessment = (element.ass)
+        await db.transaction(async(tx)=>{
+            await tx.executeSql(`INSERT INTO ${query} (Name,Matric,Score) VALUES (?,?,?)`,
+            [name,matric,assessment],
+            ()=>{},
+            error=>{console.log(error)}
+            )
+        })
+    });
+
+    json.assTak.forEach(async(element) => {
+        let query = `${className}assessmenttaken`
+        let resp = JSON.parse(element)
+        for (let index = 0; index < Object.keys(resp).length; index++) {
+            const date = (Object.keys(resp)[index])
+            const total = parseInt(Object.values(resp)[index])
+            const status = "Submitted"
+            await db.transaction(async(tx)=>{
+                await tx.executeSql(`INSERT INTO ${query} (Date,Total,Status) VALUES (?,?,?)`,
+                [date,total,status],
+                ()=>{},
+                error=>{console.log(error)}
+                )
+            })                
+        }
+        
+    });
+
+    json.allEx.forEach(async(element) => {
+        let query = `${className}exam`
+        const { name, matric, ex} = element
+        const exa = JSON.parse(ex)
+        const exam = parseInt(Object.values(exa)[0])
+        await db.transaction(async(tx)=>{
+            await tx.executeSql(`INSERT INTO ${query} (Name,Matric,Score) VALUES (?,?,?)`,
+            [name,matric,exam],
+            ()=>{},
+            error=>{console.log(error)}
+            )
+        })
+    });
+
+    await db.transaction(async(tx)=>{
+        await tx.executeSql(`SELECT * FROM BasicInfo WHERE Property = 'Exam'`,[],
+        (tx,results)=>{
+            if (results.rows.length==0) {
+                let desc={}
+                desc[`${className}`]="Submitted"
+                let description = JSON.stringify(desc)
+                tx.executeSql(`INSERT INTO BasicInfo (Property, Description) Values (?,?)`,
+                    ['Exam', description],
+                    (tx,results)=>{
+                    })
+            }else{
+                let desc=JSON.parse(results.rows.item(0).Description)
+                desc[`${className}`]="Submitted"
+                let description = JSON.stringify(desc)
+                tx.executeSql(`UPDATE BasicInfo SET Description = '${description}' WHERE Property = 'Exam'`,
+                    [],
+                    (tx,results)=>{
+                    })
+            }
+        })
+    })
+
+    await db.transaction(async(tx)=>{
+
+        await tx.executeSql(`SELECT * FROM BasicInfo WHERE Property = 'ExamScore'`,[],
+        (tx,results)=>{
+            if (results.rows.length==0) {
+                let desc={}
+                desc[`${className}`]= json.exTak[Object.keys(json.exTak)[0]]
+                let description = JSON.stringify(desc)
+                tx.executeSql(`INSERT INTO BasicInfo (Property, Description) Values (?,?)`,
+                    ['ExamScore', description],
+                    (tx,results)=>{
+                    })
+            }else{
+                let desc=JSON.parse(results.rows.item(0).Description)
+                desc[`${className}`]=json.exTak[Object.keys(json.exTak)[0]]
+                let description = JSON.stringify(desc)
+                tx.executeSql(`UPDATE BasicInfo SET Description = '${description}' WHERE Property = 'ExamScore'`,
+                    [],
+                    (tx,results)=>{
+                    })
+            }
+        })
+    })
+
+navigation.navigate("Home")
+    }
+    
   }
 
 
@@ -315,7 +348,7 @@ export default RetrieveSetClass = ({ navigation })=>{
             />
             <Prompt
                                 title={className}
-                                placeholder="Enter Class Password"
+                                placeholder={"Enter Class Password"}
                                 isVisible={visible}
                                 onChangeText={(text) => {
                                 setPassword(text)}}

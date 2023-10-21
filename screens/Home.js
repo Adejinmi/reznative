@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, StatusBar, View, Text, TouchableOpacity, ScrollView} from "react-native";
-import FAIcons from 'react-native-vector-icons/FontAwesome'
-import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FeatIcons from 'react-native-vector-icons/Feather'
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import { AppContext } from "../components/appContext";

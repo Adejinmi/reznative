@@ -94,6 +94,7 @@ export default ChangeClassPassword = ({ navigation}) =>{
                           console.log(results)
                       })
           })
+          console.log(json.token)
           setToken(json.token)
           Alert.alert("Success!", "Password has been Changed",[
               {
@@ -111,7 +112,7 @@ export default ChangeClassPassword = ({ navigation}) =>{
           [
           {
            text: 'OK',
-           style: 'cancel',
+           onPress:()=> navigation.navigate('settings')
           },
           ],
       );

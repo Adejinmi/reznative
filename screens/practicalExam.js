@@ -428,7 +428,7 @@ export default PracticalExam = ({ navigation }) =>{
                         <Text style={{fontFamily:"futura_medium", color:"white", textAlign:"center"}}>{content}</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={{backgroundColor:"rgb(80,80,225)", width:80, padding:7, borderRadius:5, marginTop:5}} onPress={()=>navigation.navigate('Homepage')}>
+                        <TouchableOpacity style={{backgroundColor:"rgb(80,80,225)", width:80, padding:7, borderRadius:5, marginTop:5}} onPress={()=>navigation.navigate('Home')}>
                         <Text style={{fontFamily:"futura_medium", color:"white", textAlign:"center"}}>Done</Text>
                         </TouchableOpacity>
                     </View>

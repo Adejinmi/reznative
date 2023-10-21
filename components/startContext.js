@@ -20,7 +20,7 @@ export const checkTable = () =>{
 export const StartContext = createContext()
 
 const StartContextProvider =(props)=>{
-
+    const api = 'https://rezupapi.onrender.com/api'
     const [unit, setUnit] = useState()
     const [instrument, setcInstrument] = useState()
     const [pin, setPin] = useState()
@@ -31,7 +31,7 @@ const StartContextProvider =(props)=>{
  
 
     return(
-        <StartContext.Provider value={{ unit, setUnit, instrument, setcInstrument, pin, setPin, cpin, setCPin, pass, setPass, instructor, setInstructor, level, setLevel }}>
+        <StartContext.Provider value={{ unit, setUnit, instrument, setcInstrument, pin, setPin, cpin, setCPin, pass, setPass, instructor, setInstructor, level, setLevel, api }}>
             {props.children}
         </StartContext.Provider>
     )

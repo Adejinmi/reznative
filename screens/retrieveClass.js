@@ -57,7 +57,7 @@ export default RetrieveClass = ({ navigation })=>{
 
   const authenthicate = async()=>{
     setPassword()
-    try {
+    retrieval:try {
         const response = await fetch(
             `${api}/retrieveClass`,
           {
@@ -72,7 +72,6 @@ export default RetrieveClass = ({ navigation })=>{
             })
         });
         const json = await response.json();
-        console.log(json.allEx)
         if (json.details && json.nominalroll && json.allAtt && json.allAttTak && json.allAss && json.assTak && json.allEx && json.exTak) {
             const {className, instrument, instructor, level, unit, token} = json.details
             await db.transaction(async (tx)=>{
@@ -88,6 +87,17 @@ export default RetrieveClass = ({ navigation })=>{
                     console.log(results)
                 }
                 )})
+             
+
+            
+            
+            await db.transaction(async (tx)=>{
+                    await tx.executeSql(`INSERT INTO ClassesCreated (Name,Password,Instructors,Instrument,Unit,Level) VALUES (?,?,?,?,?,?)`,
+                    [className,token,instructor,instrument,unit,level],
+                    ()=>{},
+                    error=>{console.log(error)}
+                    )
+                })
             
             await db.transaction(async (tx)=>{
                 let query= `${className}nominalroll`
@@ -152,15 +162,7 @@ export default RetrieveClass = ({ navigation })=>{
                 error=>{console.log(error)}
                 )})
         
-            await db.transaction(async (tx)=>{
-                await tx.executeSql(`INSERT INTO ClassesCreated (Name,Password,Instructors,Instrument,Unit,Level) VALUES (?,?,?,?,?,?)`,
-                [className,token,instructor,instrument,unit,level],
-                ()=>{},
-                error=>{console.log(error)}
-                )
-            })
-
-            json.nominalroll.forEach(async(element) => {
+                json.nominalroll.forEach(async(element) => {
                 let query = `${className}nominalroll`
                 const { name, matric} = element
                 await db.transaction(async(tx)=>{
@@ -302,7 +304,7 @@ export default RetrieveClass = ({ navigation })=>{
         
     } catch (error) {
             setContent('Submit')
-            Alert.alert("Oops!","Check your Internet Connection and Try Again!")
+            Alert.alert("Oops!","Something went wrong, Try Again!")
         
     }
   }
@@ -316,7 +318,7 @@ export default RetrieveClass = ({ navigation })=>{
             />
             <Prompt
                                 title={className}
-                                placeholder="Enter Class Password"
+                                placeholder={"Enter Class Password"}
                                 isVisible={visible}
                                 onChangeText={(text) => {
                                 setPassword(text)}}
@@ -335,7 +337,7 @@ export default RetrieveClass = ({ navigation })=>{
                                 inputStyle={{fontFamily:"futura_book", fontSize:15,margin:0, marginBottom:-20}}
                                 btnTextStyle={{fontFamily:"futura_book", fontSize:15, color:'white'}}
                                 submitButtonText={content}
-                            />
+                        />
              <FlatList style={{backgroundColor:'rgba(255,255,253,1)', paddingHorizontal:10 }}
                 ItemSeparatorComponent={
                     <View

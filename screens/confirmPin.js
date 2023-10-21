@@ -143,7 +143,12 @@ export default function ConfirmPin({ route, navigation }){
                         error=>{console.log(error)}
                         )
                     })
-                } else {
+                } else if(json.msg==="Class Exists"){
+                    setEnabled(true)
+                    setContent("Create Class")
+                    return Alert.alert("Oops!","This Class Exists Already")
+                }
+                    else {
                     setEnabled(true)
                     setContent("Create Class")
                     return Alert.alert("Oops!","Something went wrong, Try again")

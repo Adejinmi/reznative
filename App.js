@@ -81,20 +81,20 @@ function App() {
     return(
       <Stack.Navigator initialRouteName='Homepage'>
         <Stack.Screen name="Homepage" component={Home} options={{headerShown:false}}/>
-        <Stack.Screen name="New Attendance" component={TakeAttendance} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>
+        <Stack.Screen name="New Attendance" component={TakeAttendance} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white",}}/>
         
-        <Stack.Screen name="View Attendance" component={singleAttendance} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>   
+        <Stack.Screen name="View Attendance" component={singleAttendance} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white",}}/>   
 
-        <Stack.Screen name="View Assessment" component={singleAssessment} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>   
+        <Stack.Screen name="View Assessment" component={singleAssessment} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white",}}/>   
 
-        <Stack.Screen name="All Attendance" component={AllAttendance} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>
+        <Stack.Screen name="All Attendance" component={AllAttendance} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white",}}/>
         <Stack.Screen name="SetPin" component={CreatePin} options={{headerShown:false}}/>
         <Stack.Screen name="CreateClass" component={CreateClass} options={{headerShown:false}}/>
         <Stack.Screen name="Unlock" component={UnlockScreen} options={{headerShown:false}}/>
         <Stack.Screen name="Assessment" component={Assessment
-        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>
+        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white",}}/>
         
-        <Stack.Screen name="All Assessments" component={AllAssessment} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>
+        <Stack.Screen name="All Assessments" component={AllAssessment} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white",}}/>
       </Stack.Navigator> 
     )
   }
@@ -140,30 +140,30 @@ function App() {
     return(
       <Stack.Navigator initialRouteName='Question Bank'>
         <Stack.Screen name="Question Bank" component={QuestionBank
-        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>
+        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white",}}/>
 
         <Stack.Screen name="Add to Local Bank" component={addQuestion
-        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>
+        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white",}}/>
 
         <Stack.Screen name="Local Bank" component={SingleQuestion
-        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>
+        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white",}}/>
         
-        <Stack.Screen name="General Bank" component={AllAssessment} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>        
+        <Stack.Screen name="General Bank" component={AllAssessment} options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center",fontFamily:"futura_book" }, headerTintColor: "white",}}/>        
       </Stack.Navigator> 
     )
   }
 
   const NominalRollStack = () =>{
     return(
-      <Stack.Navigator initialRouteName='Nominal Roll'>
+      <Stack.Navigator initialRouteName='Nominal Roll' detachInactiveScreens={true}>
         <Stack.Screen name="Nominal Roll" component={NorminalRoll
-        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>    
+        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white",}}/>    
 
         <Stack.Screen name="Add Students" component={addStudents
-        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white",}}/>
+        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white",}}/>
 
         <Stack.Screen name="Edit Student Details" component={singleStudent
-        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center" }, headerTintColor: "white", }}/>    
+        } options={{ headerTitleAlign:"center",  headerStyle: {backgroundColor: 'rgb(80,80,225)', borderBottomWidth: 0, shadowColor: "black", elevation: 50,}, headerTitleStyle: {color: "white", textAlign:"center", fontFamily:"futura_book" }, headerTintColor: "white", }}/>    
 
       </Stack.Navigator> 
     )

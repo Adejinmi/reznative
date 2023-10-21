@@ -268,7 +268,13 @@ export default function NewClass({ navigation }){
                                 text: "OK",
                                 onPress:()=>navigation.navigate('Home')
                             }])
-                        } else {
+                        }
+                        else if(json.msg==="Class Exists"){
+                            setEnabled(true)
+                            setContent("Create Class")
+                            return Alert.alert("Oops!","This Class Exists Already")
+                        }
+                        else {
                             setEnabled(true)
                             setContent("Create Class")
                             return Alert.alert("Oops!","Something went wrong, Try again")
@@ -302,7 +308,7 @@ export default function NewClass({ navigation }){
                 <Text style={styles.labelText} >Instructor(s)</Text>
             </View>
             <Text style={styles.sub}>(Separated by a comma)</Text>
-            <TextInput style={[styles.labelInput, styles.elevation]} multiline={true} value={instructors} onChangeText={(e)=>{setInstructors(e)}} />
+            <TextInput style={[styles.labelInput, styles.elevation]} value={instructors} onChangeText={(e)=>{setInstructors(e)}} />
 
             <View style={{flexDirection:"row"}}>
             <View style={{width:"47%"}}>
